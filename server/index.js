@@ -21,10 +21,14 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin:"http://localhost:3006",
-    credentials:true,
+    origin: [
+      "http://localhost:3006", // Allow local frontend
+      "https://your-frontend.vercel.app", // Allow deployed frontend
+    ],
+    credentials: true, // Allow cookies
   })
-)
+);
+
 app.use(
   fileupload({
     useTempFiles:true,
