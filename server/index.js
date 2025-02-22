@@ -23,7 +23,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:3006", // Allow local frontend
-      "https://your-frontend.vercel.app", // Allow deployed frontend
+      "https://st-auub5r1p0-rakeshs-projects-d5bdfbca.vercel.app/", // Allow deployed frontend
     ],
     credentials: true, // Allow cookies
   })
