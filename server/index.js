@@ -21,10 +21,14 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "*", // Allow all origins
+    origin: [
+       // Allow local frontend
+      "https://st-tgar.vercel.app", // Allow deployed frontend
+    ],
     credentials: true, // Allow cookies
   })
 );
+
 
 
 app.use(
