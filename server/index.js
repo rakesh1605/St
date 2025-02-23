@@ -17,7 +17,7 @@ const PORT= 8000;
 database.connect();
 cloudinaryConnect();
 //middlewares
-app.use(express.json());
+
 app.use(cookieParser());
 app.use(
   cors({
@@ -25,7 +25,7 @@ app.use(
     credentials: true, // Allow cookies
   })
 );
-
+app.use(express.json());
 
 app.use(
   fileupload({
