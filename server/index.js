@@ -21,13 +21,11 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: [
-      "http://localhost:3006", // Allow local frontend
-      "https://st-auub5r1p0-rakeshs-projects-d5bdfbca.vercel.app/", // Allow deployed frontend
-    ],
+    origin: "*", // Allow all origins
     credentials: true, // Allow cookies
   })
 );
+
 
 app.use(
   fileupload({
