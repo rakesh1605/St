@@ -28,7 +28,7 @@ exports.resetPasswordToken =async (req,res)=>{
   );
   
   //linkgenerate of frontend
-  const url= `http://localhost:3006/update-password/${token}`
+  const url= `https://st-tgar.vercel.app/update-password/${token}`
   //send mail containing url
   await mailSender(email,"password reset Link",`password reset link ${url}`);
   //return response
