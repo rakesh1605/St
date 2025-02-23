@@ -9,4 +9,4 @@ router.post("/verifySignature",auth, isStudent,verifySignature)
 router.post("/sendPaymentSuccessEmail",auth,isStudent,sendPaymentSuccessEmail)
 // router.post("/sendPaymentSuccessEmail", auth, isStudent, sendPaymentSuccessEmail);
 
-module.exports = router
+module.exports = router                                                                                  

@@ -21,10 +21,11 @@ cloudinaryConnect();
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "*", // Allow all origins
-    credentials: true, // Allow cookies
+    origin: ["http://localhost:3000", "https://styd.vercel.app"],
+    credentials: true,
   })
 );
+
 app.use(express.json());
 
 app.use(
