@@ -8,44 +8,45 @@ const {paymentSuccessEmail} =require("../mailTemplates/paymentSuccessEmail");
 const crypto=require("crypto");
 const CourseProgress = require("../models/CourseProgress");
 //capture the payment
-exports.capturePayment = async (req, res) => {
-  console.log("Inside capture", req.body);
+exports.capturePayment=async(req,res)=>{
+  console.log("inside capture",req.body);
+  const courses=req.body;
+  const userId=req.user.id;
+  console.log("course",courses)
 
-  const courses = req.body;
-  const userId = req.user.id;
-
-  if (!Array.isArray(courses) || courses.length === 0) {
-    return res.status(400).json({
-      success: false,
-      message: "Please provide Course Id(s) as an array"
+  if(courses.length===0){
+    return res.json({
+      success:false, 
+      message:"Please provide Course Id"
     });
   }
-
-  let totalAmount = 0;
-  const uid = new mongoose.Types.ObjectId(userId);
-
+  
+  let totalAmount=0;
+  
   for (const course_id of Object.values(courses)) {
-    const courseIdsArray = course_id.split(',');
-
+    const courseIdsArray = course_id.split(','); // Split if it's a comma-separated string
+  
     for (const id of courseIdsArray) {
+      let course;
       try {
         console.log('Course ID:', id);
-        const course = await Course.findById(id.trim());
-
+        course = await Course.findById(id.trim());
+  
         if (!course) {
           return res.status(404).json({
             success: false,
             message: `Could not find course with id: ${id}`,
           });
         }
-
+  
+        const uid = new mongoose.Types.ObjectId(userId);
         if (course.studentsEnrolled.includes(uid)) {
           return res.status(200).json({
             success: false,
             message: `Student is already enrolled in course with id: ${id}`,
           });
         }
-
+  
         totalAmount += course.price;
       } catch (error) {
         console.error(`Error finding course with id ${id}:`, error);
@@ -57,28 +58,32 @@ exports.capturePayment = async (req, res) => {
       }
     }
   }
+  
+  
+  //Creating options to create order
+  const options={
+    amount:totalAmount*100,
+    currency:"INR",
+    receipt:Math.random(Date.now()).toString(),
+  }
 
-  // Create Razorpay Order
-  try {
-    const options = {
-      amount: totalAmount * 100,  // in paise (for INR)
-      currency: "INR",
-      receipt: `receipt_order_${Date.now()}`
-    };
 
-    const order = await instance.orders.create(options);
-    res.status(200).json({ success: true, order });
-  } catch (error) {
+  try{
+    const paymentResponse = await instance.orders.create(options);
+    return res.json({
+      success:true,
+      data:paymentResponse
+    })
+  }
+  catch(error){
     console.error("Razorpay Error:", error);
     if (error.response) console.error("Razorpay Response:", error.response.data);
-    
-    res.status(500).json({
-      success: false,
-      message: "Could not initiate order",
-      error: error.message
-    });
+    return res.status(500).json({
+      success:false,
+      message:"Could not Intitate Order"
+    })
   }
-};
+}
 
 
 //verify signature
