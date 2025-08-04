@@ -100,7 +100,7 @@ exports.verifySignature=async(req,res)=>{
   }
 
   let body=razorpay_order_id + "|" + razorpay_payment_id;
-  console.log("Razorpay Secret:", process.env.RAZORPAY_SECRET);
+  console.log("Razorpay Secret:", process.env.Razorpay_SECRET);
  const expectedSignature=crypto.createHmac("sha256",process.env.RAZORPAY_SECRET).update(body.toString()).digest("hex");
   if(expectedSignature===razorpay_signature){
     //enroll the student
