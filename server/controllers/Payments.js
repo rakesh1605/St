@@ -67,7 +67,7 @@ exports.capturePayment=async(req,res)=>{
     receipt:Math.random(Date.now()).toString(),
   }
  console.log(options);
-
+  console.log(instance);
   try{
     const paymentResponse = await instance.orders.create(options);
     return res.json({
